@@ -6,6 +6,16 @@ verbose: true
 link_overrides:
   # Only files that need customization should be listed here
   # The rest will be installed as is
+  zsh:
+    file_overrides:
+      ".zshrc.mac":
+        target_name: ".zshrc-platform"
+        conditions:
+          os: ["darwin"]
+      ".zshrc.linux":
+        target_name: ".zshrc-platform"
+        conditions:
+          os: ["linux"]
   dloom:
     file_overrides:
       "config.yaml":

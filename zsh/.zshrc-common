@@ -18,5 +18,5 @@ fpath=(~/.zsh/completion $fpath)
 autoload -Uz compinit && compinit -i
 
 source ~/.zshrc.gitconfigs
-source ~/.zshrc.mac
+source ~/.zshrc-platform
 source ~/.zshrc.uber
