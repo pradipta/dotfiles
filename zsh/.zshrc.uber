@@ -49,3 +49,6 @@ desk() {
 }
 
 alias claude="aifx agent run claude"
+alias cc=claude
+alias codex="aifx agent run codex"
+alias cx=codex
