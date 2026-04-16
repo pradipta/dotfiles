@@ -62,7 +62,7 @@ desk() {
 
 alias idea='open -na "IntelliJ IDEA" --args "$@"'
 alias sshnoproxy="ssh -o proxyCommand=none"
-plugins=(git)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 
 alias wp="cd ~/workplace/"
 
