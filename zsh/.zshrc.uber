@@ -11,7 +11,7 @@ desk() {
                 ;;
             "java"|"standard")
                 echo "☕ SSHing into Java (Standard) environment..."
-                ssh pradiptas.devpod-ind
+                ssh pradiptas-java.devpod-ind
                 return
                 ;;
             "web")
@@ -36,7 +36,7 @@ desk() {
             ;;
         "Java")
             echo "☕ SSHing into Java environment..."
-            ssh pradiptas.devpod-ind
+            ssh pradiptas-java.devpod-ind
             ;;
         "Web")
             echo "🌐 SSHing into Web environment..."
