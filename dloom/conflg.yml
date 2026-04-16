@@ -1,0 +1,18 @@
+# dloom configuration file
+version: 0.0.1
+
+verbose: true
+
+link_overrides:
+  # Only files that need customization should be listed here
+  # The rest will be installed as is
+  dloom:
+    file_overrides:
+      "config.yaml":
+        target_dir: "~/.config/dloom"
+  wallpapers:
+    source_dir: "resources/wallpapers"
+    target_dir: "~/Pictures/wallpapers"
+  fonts:
+    source_dir: "resources/fonts"
+    target_dir: "~/.local/share/fonts"

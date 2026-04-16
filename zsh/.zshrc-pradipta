@@ -1,0 +1,313 @@
+ZSH_THEME="robbyrussell"
+plugins=(git)
+
+source $ZSH/oh-my-zsh.sh
+
+export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/opt/homebrew/share/zsh-syntax-highlighting/highlighters
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+alias deskjava='ssh pradiptas.devpod-ind'
+alias deskgo='ssh pradiptas-go.devpod-ind'
+
+desk() {
+    local target=$1
+
+    # 1. Handle direct arguments
+    if [ -n "$target" ]; then
+        case "$target" in
+            "go")
+                echo "🚀 SSHing into Go environment..."
+                ssh pradiptas-go.devpod-ind
+                return
+                ;;
+            "java"|"standard")
+                echo "☕ SSHing into Java (Standard) environment..."
+                ssh pradiptas.devpod-ind
+                return
+                ;;
+            "web")
+                echo "🌐 SSHing into Web environment..."
+                ssh pradiptas-web.devpod-ind
+                return
+                ;;
+            *)
+                echo "⚠️ Unknown environment: $target. Opening menu..."
+                ;;
+        esac
+    fi
+
+    # 2. Interactive Selection
+    local env_list="Go (Standard)\nJava\nWeb"
+    local choice=$(echo -e "$env_list" | fzf --height 10% --reverse --border --header="Select Environment:")
+
+    case "$choice" in
+        "Go (Standard)")
+            echo "🚀 SSHing into Go environment..."
+            ssh pradiptas-go.devpod-ind
+            ;;
+        "Java")
+            echo "☕ SSHing into Java environment..."
+            ssh pradiptas.devpod-ind
+            ;;
+        "Web")
+            echo "🌐 SSHing into Web environment..."
+            ssh pradiptas-web.devpod-ind
+            ;;
+        *)
+            echo "Selection cancelled."
+            ;;
+    esac
+}
+
+alias idea='open -na "IntelliJ IDEA" --args "$@"'
+alias sshnoproxy="ssh -o proxyCommand=none"
+plugins=(git)
+
+alias wp="cd ~/workplace/"
+
+alias grep="grep --color"
+
+alias lst="ls -ltrh | tail -n 15"
+alias ltr="ls -ltrh | tail -n 15"
+alias tailf="tail -f"
+
+# git aliases
+alias gstat="git status"
+alias glog="git log -n 5"
+alias gadd="git add --all"
+alias gdiff="git diff HEAD"
+alias grevert="git checkout --"
+alias gb="git branch"
+alias gsb="git checkout"
+alias gcm="git commit -m"
+alias glg="git log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' -n 30 --all"
+alias gamend="git commit --amend"
+
+alias branches="git branch -v"
+alias remotes="git remote -v"
+alias gchp="git cherry-pick"
+
+function gadd () {
+    selected_files=$(
+        (
+            git status --porcelain | grep -v '^?? .*\/$'
+            git ls-files --others --exclude-standard | awk '{print "?? "$0}'
+        ) | awk '
+        {
+            status=$1;
+            file=$2;
+            if (status == "??") {
+                status="[A]";
+                color="\033[32m"; # Green for new files
+            }
+            else if (status ~ /^A/) {
+                status="[A]";
+                color="\033[32m"; # Green for added files
+            }
+            else if (status ~ /^M/) {
+                status="[M]";
+                color="\033[33m"; # Yellow for modified files
+            }
+            else if (status ~ /^D/) {
+                status="[D]";
+                color="\033[31m"; # Red for deleted files
+            }
+            print color status " " file "\033[0m";
+        }' | sort -u | fzf -m --ansi --color light --preview '
+        file=$(echo {} | awk "{print \$2}")
+        if git ls-files --error-unmatch "$file" > /dev/null 2>&1; then
+            if [ -f "$file" ]; then
+                git diff --color=always HEAD "$file"
+            else
+                git show --color=always HEAD:"$file" | sed "s/^/\\x1b[31m/" | sed "s/$/\\x1b[0m/"
+            fi
+        else
+            git diff --color=always --no-index /dev/null "$file"
+        fi' --bind "ctrl-/:change-preview-window(down|hidden|90%),tab:toggle,ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all" --header "Select files to stage")
+
+    if [ -n "$selected_files" ]; then
+        echo "$selected_files" | awk '{print $2}' | xargs git add
+        echo "Added files:"
+        echo "$selected_files" | awk '{print $2}'
+    else
+        echo "No files selected. Exiting without git add."
+    fi
+}
+
+function grevert() {
+  selected_files=$(git ls-files -m -o --exclude-standard | fzf -m --color light --preview "git diff --color=always HEAD {}" --bind "ctrl-/:change-preview-window(down|hidden|90%),tab:toggle,ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all")
+
+  if [ -n "$selected_files" ]; then
+    echo "$selected_files" | xargs git checkout --
+    echo "Referted files:"
+    echo "$selected_files"
+  else
+    echo "No files reverted."
+  fi
+}
+
+function gunstage() {
+  selected_files=$(git diff --name-only --cached | fzf -m --color light --preview "git diff --color=always HEAD {}" --bind "ctrl-/:change-preview-window(down|hidden|90%),tab:toggle,ctrl-a:select-all,ctrl-d:deselect-all,ctrl-t:toggle-all")
+
+  if [ -n "$selected_files" ]; then
+    echo "$selected_files" | xargs git restore --staged
+    echo "Unstaged files:"
+    echo "$selected_files"
+  else
+    echo "No files unstaged."
+  fi
+}
+
+function gmerge() {
+  source=$1
+  target=`git rev-parse --abbrev-ref HEAD`
+  git stash
+  gswitch $source
+  git stash
+  gpl
+  git stash pop
+  gswitch $target
+  git merge $source
+  git stash pop
+  gstat
+}
+
+function gpsh() {
+  branch=`git rev-parse --abbrev-ref HEAD`
+  remote=`git for-each-ref --format='%(upstream:short)' "$(git symbolic-ref -q HEAD)"`
+
+  if [ -z "$remote" ]
+  then
+    git push --set-upstream origin "$branch"
+  else
+    git push
+  fi
+}
+
+function gfork() {
+  bname=$1
+  git fork $bname "$(git log --pretty=oneline | fzf | cut -f 1 -d ' ')"
+}
+
+function gcob() {
+  git checkout $(git branch | fzf)
+}
+
+function gcorb() {
+  git checkout --track $(git branch -r | fzf)
+}
+
+function greset() {
+  local commitHash=`git log --pretty=format:"%h - %s" | fzf | awk '{print $1}'`
+  git reset $commitHash $1
+}
+
+function __fuzzySelectGitBranch() {
+    local max_branch_length
+    max_branch_length=$(git for-each-ref --format="%(refname:short)" refs/heads/ | awk '{ if (length > max) max = length } END { print max }') 
+    local padding=2 
+    local branch_column_width=$((max_branch_length + padding)) 
+    local selected
+    selected=$(git for-each-ref --sort=committerdate --format="%(refname:short) %(committerdate:iso) %(subject)" refs/heads/ | 
+    awk -v branch_width="$branch_column_width" '{branch=$1; date=$2; message=substr($0, index($0,$3)); printf "%-" branch_width "s %-25s %s\n", branch, date, message}' | 
+    fzf --reverse --prompt="Select a branch: " --tac --preview='git show --name-only --oneline $(git rev-parse --verify $(echo {} | awk "{print \$1}"))') 
+    if [ -n "$selected" ]
+    then
+        local branch_name
+        branch_name=$(echo "$selected" | awk '{print $1}') 
+        echo "$branch_name"
+    else
+        echo "No branch selected"
+    fi
+}
+
+function gdelb() {
+    if [ -z "$1" ]
+    then
+        local branch_name
+        branch_name=$(__fuzzySelectGitBranch)
+        if [ -n "$branch_name" ]
+        then
+            git branch -D "$branch_name"
+        else
+            echo "No branch selected"
+        fi
+    else
+        local branch_name=$1 
+        git branch -D "$branch_name"
+    fi
+}
+
+function gremotes() {
+  echo "[`date`][PRADIPTA]: git remote -v";
+  git remote -v;
+}
+
+function gswitch () {
+    if [ -z "$1" ]
+    then
+        local branch_name
+        branch_name=$(__fuzzySelectGitBranch)
+        if [ -n "$branch_name" ]
+        then
+            git checkout "$branch_name"
+        fi
+    else
+        local branch_name=$1 
+        git checkout "$branch_name"
+    fi
+}
+
+function gdelb() {
+  echo "[`date`][PRADIAPTA]: git branch -D $1";
+  git branch -D $1;
+}
+
+function gcreateb() {
+  echo "[`date`][PRADIPTA]: git checkout -b $1";
+  git checkout -b $1;
+}
+
+function grevert() {
+  for fileName in $*
+  do
+    echo "[`date`][PRADIPTA]: Reverting: $fileName";
+    echo "[`date`][PRADIPTA]: git checkout -- $fileName";
+    git checkout -- $filename;
+  done
+}
+
+function gpl() {
+  echo "[`date`][PRADIPTA] : git pull --rebase";
+  git pull --rebase;
+}
+
+function checkout() {
+  for package in $*
+  do
+    package_name=`echo $package | sed s/":.*$"//`;
+    package_branch=`echo $package | sed s/"^[^:]*"// | sed s/":"//`;
+    if [ "$package_branch" = "" ]
+    then
+      package_branch="mainline";
+    fi
+    echo "[`date`][PRADIPTA] BRAZIL CHECKOUT:  brazil ws --use --package $package_name --branch $package_branch";
+    brazil ws --use --package $package_name --branch $package_branch
+  done
+}
+
+fpath=(~/.zsh/completion $fpath)
+autoload -Uz compinit && compinit -i
+
+export PATH="$HOME/.local/share/gem/ruby/3.4.0/bin:$PATH"
+
+sublime() {
+    # Use the official helper tool with the 'add' flag
+    "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" -a "$@" &!
+}
+
+export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/opt/homebrew/share/zsh-syntax-highlighting/highlighters
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+alias claude="aifx agent run claude"
