@@ -1,0 +1,10 @@
+export ZSH_HIGHLIGHT_HIGHLIGHTERS_DIR=/opt/homebrew/share/zsh-syntax-highlighting/highlighters
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+export PATH="$HOME/.local/share/gem/ruby/3.4.0/bin:$PATH"
+alias idea='open -na "IntelliJ IDEA" --args "$@"'
+
+sublime() {
+    # Use the official helper tool with the 'add' flag
+    "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" -a "$@" &!
+}

@@ -1,0 +1,51 @@
+desk() {
+    local target=$1
+
+    # 1. Handle direct arguments
+    if [ -n "$target" ]; then
+        case "$target" in
+            "go")
+                echo "🚀 SSHing into Go environment..."
+                ssh pradiptas-go.devpod-ind
+                return
+                ;;
+            "java"|"standard")
+                echo "☕ SSHing into Java (Standard) environment..."
+                ssh pradiptas.devpod-ind
+                return
+                ;;
+            "web")
+                echo "🌐 SSHing into Web environment..."
+                ssh pradiptas-web.devpod-ind
+                return
+                ;;
+            *)
+                echo "⚠️ Unknown environment: $target. Opening menu..."
+                ;;
+        esac
+    fi
+
+    # 2. Interactive Selection
+    local env_list="Go (Standard)\nJava\nWeb"
+    local choice=$(echo -e "$env_list" | fzf --height 10% --reverse --border --header="Select Environment:")
+
+    case "$choice" in
+        "Go (Standard)")
+            echo "🚀 SSHing into Go environment..."
+            ssh pradiptas-go.devpod-ind
+            ;;
+        "Java")
+            echo "☕ SSHing into Java environment..."
+            ssh pradiptas.devpod-ind
+            ;;
+        "Web")
+            echo "🌐 SSHing into Web environment..."
+            ssh pradiptas-web.devpod-ind
+            ;;
+        *)
+            echo "Selection cancelled."
+            ;;
+    esac
+}
+
+alias claude="aifx agent run claude"
