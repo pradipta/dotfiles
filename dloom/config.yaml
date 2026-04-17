@@ -20,9 +20,34 @@ link_overrides:
     file_overrides:
       "config.yaml":
         target_dir: "~/.config/dloom"
-  wallpapers:
-    source_dir: "resources/wallpapers"
-    target_dir: "~/Pictures/wallpapers"
-  fonts:
-    source_dir: "resources/fonts"
-    target_dir: "~/.local/share/fonts"
+  resources:
+    conditions:
+      os: ["darwin"]
+    file_overrides:
+      # Directory entries — redirect to the correct system dirs (MkdirAll is a no-op since they exist)
+      "fonts":
+        target_dir: "/System/Library"
+        target_name: "Fonts"
+      "wallpapers":
+        target_dir: "/System/Library"
+        target_name: "Desktop Pictures"
+      # Font files — target_name uses "../" so filepath.Join("fonts", "../Foo.ttf") = "Foo.ttf"
+      "Consolas.ttf":
+        target_dir: "/System/Library/Fonts"
+        target_name: "../Consolas.ttf"
+      "Consolasligaturizedv3.ttf":
+        target_dir: "/System/Library/Fonts"
+        target_name: "../Consolasligaturizedv3.ttf"
+      "Consolasligaturizedv3-Bold.ttf":
+        target_dir: "/System/Library/Fonts"
+        target_name: "../Consolasligaturizedv3-Bold.ttf"
+      "Consolasligaturizedv3-Italic.ttf":
+        target_dir: "/System/Library/Fonts"
+        target_name: "../Consolasligaturizedv3-Italic.ttf"
+      "Consolasligaturizedv3-BoldItalic.ttf":
+        target_dir: "/System/Library/Fonts"
+        target_name: "../Consolasligaturizedv3-BoldItalic.ttf"
+      # Wallpaper files — same trick: filepath.Join("wallpapers", "../foo.png") = "foo.png"
+      "3440x1440-mushroom.png":
+        target_dir: "/System/Library/Desktop Pictures"
+        target_name: "../3440x1440-mushroom.png"

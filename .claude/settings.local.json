@@ -1,7 +1,13 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(dloom --help)",
+      "Bash(dloom link *)",
+      "Bash(dloom version *)",
+      "Bash(brew info *)",
+      "Read(//private/tmp/**)",
+      "Bash(gh repo *)"
     ]
   }
 }
