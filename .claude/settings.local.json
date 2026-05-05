@@ -7,7 +7,9 @@
       "Bash(dloom version *)",
       "Bash(brew info *)",
       "Read(//private/tmp/**)",
-      "Bash(gh repo *)"
+      "Bash(gh repo *)",
+      "mcp__code-mcp__get_phabricator_revision_metadata",
+      "mcp__code-mcp__get_phabricator_revision_diff"
     ]
   }
 }

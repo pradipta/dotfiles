@@ -5,7 +5,7 @@ export ZSH="$HOME/.oh-my-zsh"
 source $ZSH/oh-my-zsh.sh
 
 export PATH="/opt/homebrew/opt/php@8.4/bin:$PATH"
-
+export PATH=$PATH:$(go env GOPATH)/bin
 alias grep="grep --color"
 
 alias lst="ls -ltrh | tail -n 15"
