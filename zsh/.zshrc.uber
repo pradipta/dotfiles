@@ -54,3 +54,12 @@ alias codex="aifx agent run codex"
 alias codex-app="aifx agent run codex app"
 alias cx=codex
 alias cx-app=codex-app
+
+# ARH Stuff
+alias aco="arh checkout"
+alias acn="arh checkout next"
+alias acp="arh checkout prev"
+alias acf="arh checkout first"
+alias acl="arh checkout last"
+alias arhl="arh lint"
+alias arhp="arh publish"
