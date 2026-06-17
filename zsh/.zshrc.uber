@@ -63,7 +63,7 @@ alias codex="aifx agent run codex"
 alias codex-app="aifx agent run codex app"
 alias cx=codex
 alias cx-app=codex-app
-aliad oc="aifx agent install opencode"
+alias oc="aifx agent install opencode"
 
 # ARH Stuff
 alias aco="arh checkout"
