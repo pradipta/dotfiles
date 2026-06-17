@@ -10,12 +10,12 @@ desk() {
                 return
                 ;;
             "one"|"python")
-                echo "☕ SSHing into Java (Standard) environment..."
+                echo "☕ SSHing into Python (One) environment..."
                 ssh pradiptas-one.devpod-ind
                 return
                 ;;
             "java")
-                echo "☕ SSHing into Java (Standard) environment..."
+                echo "☕ SSHing into Java environment..."
                 ssh pradiptas-java.devpod-ind
                 return
                 ;;
