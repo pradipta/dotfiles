@@ -4,12 +4,17 @@ desk() {
     # 1. Handle direct arguments
     if [ -n "$target" ]; then
         case "$target" in
-            "go")
+            "go"|"standard")
                 echo "🚀 SSHing into Go environment..."
                 ssh pradiptas-go.devpod-ind
                 return
                 ;;
-            "java"|"standard")
+            "one"|"python")
+                echo "☕ SSHing into Java (Standard) environment..."
+                ssh pradiptas-one.devpod-ind
+                return
+                ;;
+            "java")
                 echo "☕ SSHing into Java (Standard) environment..."
                 ssh pradiptas-java.devpod-ind
                 return
@@ -26,7 +31,7 @@ desk() {
     fi
 
     # 2. Interactive Selection
-    local env_list="Go (Standard)\nJava\nWeb"
+    local env_list="Go (Standard)\nOne (Python)\nJava\nWeb"
     local choice=$(echo -e "$env_list" | fzf --height 10% --reverse --border --header="Select Environment:")
 
     case "$choice" in
