@@ -44,7 +44,7 @@ desk() {
             ssh pradiptas-java.devpod-ind
             ;;
         "One")
-            echo "☕ SSHing into Java environment..."
+            echo "☕ SSHing into Python environment..."
             ssh pradiptas-one.devpod-ind
             ;;
         "Web")
