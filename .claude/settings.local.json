@@ -9,7 +9,8 @@
       "Read(//private/tmp/**)",
       "Bash(gh repo *)",
       "mcp__code-mcp__get_phabricator_revision_metadata",
-      "mcp__code-mcp__get_phabricator_revision_diff"
+      "mcp__code-mcp__get_phabricator_revision_diff",
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); print\\(data[0]['text']\\)\")"
     ]
   }
 }

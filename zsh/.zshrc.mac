@@ -8,3 +8,30 @@ sublime() {
     # Use the official helper tool with the 'add' flag
     "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" -a "$@" &!
 }
+
+
+# Java version selectors for local development.
+use_java() {
+  local version="$1"
+  local java_home=""
+
+  if [[ "$version" == "25" && -d "$HOME/.jdks/temurin-25.jdk/Contents/Home" ]]; then
+    java_home="$HOME/.jdks/temurin-25.jdk/Contents/Home"
+  else
+    java_home=$(/usr/libexec/java_home -v "$version" 2>/dev/null) || {
+      echo "JDK $version is not installed."
+      return 1
+    }
+  fi
+
+  export JAVA_HOME="$java_home"
+  path=(${path:#/Library/Java/JavaVirtualMachines/*/Contents/Home/bin})
+  path=(${path:#$HOME/.jdks/*/Contents/Home/bin})
+  path=("$JAVA_HOME/bin" $path)
+  hash -r
+  java -version
+}
+
+alias java17='use_java 17'
+alias java21='use_java 21'
+alias java25='use_java 25'

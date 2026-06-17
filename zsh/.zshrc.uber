@@ -38,6 +38,10 @@ desk() {
             echo "☕ SSHing into Java environment..."
             ssh pradiptas-java.devpod-ind
             ;;
+        "One")
+            echo "☕ SSHing into Java environment..."
+            ssh pradiptas-one.devpod-ind
+            ;;
         "Web")
             echo "🌐 SSHing into Web environment..."
             ssh pradiptas-web.devpod-ind
@@ -54,6 +58,7 @@ alias codex="aifx agent run codex"
 alias codex-app="aifx agent run codex app"
 alias cx=codex
 alias cx-app=codex-app
+aliad oc="aifx agent install opencode"
 
 # ARH Stuff
 alias aco="arh checkout"

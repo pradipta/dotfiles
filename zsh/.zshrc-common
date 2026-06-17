@@ -11,6 +11,7 @@ alias grep="grep --color"
 alias lst="ls -ltrh | tail -n 15"
 alias ltr="ls -ltrh | tail -n 15"
 alias tailf="tail -f"
+alias npm-public='NPM_CONFIG_USERCONFIG="$HOME/.npmrc-public" /opt/homebrew/bin/npm'
 
 alias wp="cd ~/workplace/"
 
