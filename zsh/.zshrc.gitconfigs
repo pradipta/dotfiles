@@ -1,9 +1,7 @@
 # git aliases
 alias gstat="git status"
 alias glog="git log -n 5"
-alias gadd="git add --all"
 alias gdiff="git diff HEAD"
-alias grevert="git checkout --"
 alias gb="git branch"
 alias gsb="git checkout"
 alias gcm="git commit -m"
@@ -185,23 +183,9 @@ function gswitch () {
     fi
 }
 
-function gdelb() {
-  echo "[`date`][PRADIAPTA]: git branch -D $1";
-  git branch -D $1;
-}
-
 function gcreateb() {
   echo "[`date`][PRADIPTA]: git checkout -b $1";
   git checkout -b $1;
-}
-
-function grevert() {
-  for fileName in $*
-  do
-    echo "[`date`][PRADIPTA]: Reverting: $fileName";
-    echo "[`date`][PRADIPTA]: git checkout -- $fileName";
-    git checkout -- $filename;
-  done
 }
 
 function gpl() {

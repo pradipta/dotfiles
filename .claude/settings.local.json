@@ -10,7 +10,10 @@
       "Bash(gh repo *)",
       "mcp__code-mcp__get_phabricator_revision_metadata",
       "mcp__code-mcp__get_phabricator_revision_diff",
-      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); print\\(data[0]['text']\\)\")"
+      "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); print\\(data[0]['text']\\)\")",
+      "Bash(awk '{print $0}')",
+      "Bash(sort -t: -k2)",
+      "Bash(zsh -n .zshrc.gitconfigs)"
     ]
   }
 }

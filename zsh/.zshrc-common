@@ -1,8 +1,26 @@
+# Dedupe PATH/fpath so re-sourcing this file never piles up duplicate entries.
+typeset -U path fpath
+
+# Make custom completions visible to oh-my-zsh's compinit (runs once, cached),
+# instead of paying for a second compinit pass below.
+fpath=(~/.zsh/completion $fpath)
+
 ZSH_THEME="robbyrussell"
 
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting)
 export ZSH="$HOME/.oh-my-zsh"
 source $ZSH/oh-my-zsh.sh
+
+# --- History: persist generously and share across all concurrent sessions ---
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=100000
+SAVEHIST=100000
+setopt EXTENDED_HISTORY       # record timestamp per command
+setopt SHARE_HISTORY          # live-share history across open shells (and devpods over a synced home)
+setopt INC_APPEND_HISTORY     # write commands as they're run, not at shell exit
+setopt HIST_IGNORE_ALL_DUPS   # drop older duplicates of a command
+setopt HIST_IGNORE_SPACE      # leading space = don't record (handy for secrets)
+setopt HIST_REDUCE_BLANKS     # tidy whitespace before saving
 
 export PATH="/opt/homebrew/opt/php@8.4/bin:$PATH"
 export PATH=$PATH:$(go env GOPATH)/bin
@@ -15,8 +33,10 @@ alias npm-public='NPM_CONFIG_USERCONFIG="$HOME/.npmrc-public" /opt/homebrew/bin/
 
 alias wp="cd ~/workplace/"
 
-fpath=(~/.zsh/completion $fpath)
-autoload -Uz compinit && compinit -i
+# fzf key bindings + completion: Ctrl-R fuzzy history, Ctrl-T file picker, Alt-C cd.
+if command -v fzf >/dev/null 2>&1; then
+  source <(fzf --zsh)
+fi
 
 source ~/.zshrc.gitconfigs
 source ~/.zshrc-platform

@@ -1,60 +1,46 @@
 desk() {
-    local target=$1
+    # key -> "host|emoji|label". `order` keeps the menu in a stable sequence
+    # (zsh assoc arrays are unordered).
+    local -A desks=(
+        go   "pradiptas-go.devpod-ind|🚀|Go (Standard)"
+        one  "pradiptas-one.devpod-ind|🐍|One (Python)"
+        java "pradiptas-java.devpod-ind|☕|Java"
+        web  "pradiptas-web.devpod-ind|🌐|Web"
+    )
+    local order=(go one java web)
 
-    # 1. Handle direct arguments
-    if [ -n "$target" ]; then
-        case "$target" in
-            "go"|"standard")
-                echo "🚀 SSHing into Go environment..."
-                ssh pradiptas-go.devpod-ind
-                return
-                ;;
-            "one"|"python")
-                echo "☕ SSHing into Python (One) environment..."
-                ssh pradiptas-one.devpod-ind
-                return
-                ;;
-            "java")
-                echo "☕ SSHing into Java environment..."
-                ssh pradiptas-java.devpod-ind
-                return
-                ;;
-            "web")
-                echo "🌐 SSHing into Web environment..."
-                ssh pradiptas-web.devpod-ind
-                return
-                ;;
-            *)
-                echo "⚠️ Unknown environment: $target. Opening menu..."
-                ;;
-        esac
+    # Map friendly synonyms onto canonical keys.
+    local target=$1
+    case "$target" in
+        standard) target=go  ;;
+        python)   target=one ;;
+    esac
+
+    local key=""
+    if [[ -n "$target" ]]; then
+        if [[ -n "${desks[$target]}" ]]; then
+            key=$target
+        else
+            echo "⚠️ Unknown environment: $target. Opening menu..."
+        fi
     fi
 
-    # 2. Interactive Selection
-    local env_list="Go (Standard)\nOne (Python)\nJava\nWeb"
-    local choice=$(echo -e "$env_list" | fzf --height 10% --reverse --border --header="Select Environment:")
+    # No (valid) arg → interactive picker showing just the labels.
+    if [[ -z "$key" ]]; then
+        local choice
+        choice=$(for k in $order; do printf '%s\t%s\n' "$k" "${desks[$k]##*|}"; done \
+            | fzf --height 20% --reverse --border --header="Select Environment:" \
+                  --delimiter='\t' --with-nth=2)
+        [[ -z "$choice" ]] && { echo "Selection cancelled."; return 1; }
+        key=${choice%%$'\t'*}
+    fi
 
-    case "$choice" in
-        "Go (Standard)")
-            echo "🚀 SSHing into Go environment..."
-            ssh pradiptas-go.devpod-ind
-            ;;
-        "Java")
-            echo "☕ SSHing into Java environment..."
-            ssh pradiptas-java.devpod-ind
-            ;;
-        "One")
-            echo "☕ SSHing into Python environment..."
-            ssh pradiptas-one.devpod-ind
-            ;;
-        "Web")
-            echo "🌐 SSHing into Web environment..."
-            ssh pradiptas-web.devpod-ind
-            ;;
-        *)
-            echo "Selection cancelled."
-            ;;
-    esac
+    local entry=${desks[$key]}
+    local host=${entry%%|*}
+    local emoji=${${entry#*|}%%|*}
+    local label=${entry##*|}
+    echo "$emoji SSHing into $label environment..."
+    ssh "$host"
 }
 
 alias claude="claude --model 'claude-opus-4-8[1m]'"
