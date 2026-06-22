@@ -20,6 +20,12 @@ link_overrides:
     file_overrides:
       "config.yaml":
         target_dir: "~/.config/dloom"
+  # Sublime Text user configs + scripts. Every file in sublime/ is symlinked into
+  # the User package, where Sublime auto-loads .py plugins / .sublime-* files.
+  sublime:
+    target_dir: "~/Library/Application Support/Sublime Text/Packages/User"
+    conditions:
+      os: ["darwin"]
   resources:
     conditions:
       os: ["darwin"]

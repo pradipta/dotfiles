@@ -1,0 +1,27 @@
+[
+    { "caption": "JSON: Format (pretty-print)", "command": "format_json" },
+    { "caption": "JSON: Flatten (minify)", "command": "flatten_json" },
+
+    { "caption": "Encode: Base64", "command": "base64_encode" },
+    { "caption": "Decode: Base64", "command": "base64_decode" },
+    { "caption": "Encode: URL", "command": "url_encode" },
+    { "caption": "Decode: URL", "command": "url_decode" },
+    { "caption": "Decode: JWT (to new tab)", "command": "decode_jwt" },
+
+    { "caption": "Case: snake_case", "command": "to_snake_case" },
+    { "caption": "Case: kebab-case", "command": "to_kebab_case" },
+    { "caption": "Case: camelCase", "command": "to_camel_case" },
+
+    { "caption": "Lines: Sort + Unique", "command": "sort_unique_lines" },
+    { "caption": "Lines: Remove Duplicates", "command": "remove_duplicate_lines" },
+    { "caption": "Lines: Reverse", "command": "reverse_lines" },
+    { "caption": "Lines: Sum Numbers", "command": "sum_numbers" },
+
+    { "caption": "Insert: UUID", "command": "insert_uuid" },
+    { "caption": "Insert: ISO Timestamp (UTC)", "command": "insert_iso_timestamp" },
+    { "caption": "Insert: Unix Epoch", "command": "insert_epoch" },
+
+    { "caption": "Copy: Absolute Path", "command": "copy_absolute_path" },
+    { "caption": "Copy: Relative Path", "command": "copy_relative_path" },
+    { "caption": "Copy: File Name", "command": "copy_file_name" }
+]

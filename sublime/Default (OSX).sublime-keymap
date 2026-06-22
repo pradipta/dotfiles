@@ -1,0 +1,11 @@
+[
+    // --- your originals ---
+    { "keys": ["super+alt+f"], "command": "format_json" },
+    { "keys": ["super+alt+m"], "command": "flatten_json" },
+
+    // --- added: everything else is in the Command Palette (cmd+shift+P) ---
+    { "keys": ["super+alt+b"], "command": "base64_encode" },
+    { "keys": ["super+alt+shift+b"], "command": "base64_decode" },
+    { "keys": ["super+alt+j"], "command": "decode_jwt" },
+    { "keys": ["super+alt+u"], "command": "insert_uuid" }
+]

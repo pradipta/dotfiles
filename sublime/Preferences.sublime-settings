@@ -1,0 +1,13 @@
+{
+	// --- your original setting ---
+	"font_size": 12,
+
+	// --- tasteful defaults (delete any you dislike) ---
+	"trim_trailing_white_space_on_save": "all",
+	"ensure_newline_at_eof_on_save": true,
+	"highlight_line": true,
+	"draw_white_space": ["selection"],
+	"rulers": [80, 120],
+	"bold_folder_labels": true,
+	"scroll_past_end": true,
+}

@@ -13,7 +13,12 @@
       "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); print\\(data[0]['text']\\)\")",
       "Bash(awk '{print $0}')",
       "Bash(sort -t: -k2)",
-      "Bash(zsh -n .zshrc.gitconfigs)"
+      "Bash(zsh -n .zshrc.gitconfigs)",
+      "Read(//Users/pradipta.s/**)",
+      "Bash(awk '{print $5\"\\\\t\"$9}')",
+      "Bash(awk '{print $9}')",
+      "Bash(command -v dloom)",
+      "Bash(grep -iE 'readme|\\\\.go$|example|config')"
     ]
   }
 }
